@@ -20,7 +20,7 @@ Be sure to have installed git on your device for using github, and use your comm
 
 
 2. WHEN CODING, DO THIS
-(check if you have something like C:\Users\User\KedaiRuncit in your cmd, if dont have then do - cd KedaiRuncit)
+(check if you have something like C:\Users\User\OnDeWei in your cmd, if dont have then do - cd KedaiRuncit)
 - git checkout yourname-feature
 - git pull origin main
 - code .
