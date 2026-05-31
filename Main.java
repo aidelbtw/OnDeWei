@@ -13,7 +13,7 @@ public class Main {
             System.out.println("3. Rider Manager [Priority Queue]");
             System.out.println("4. Place Order [Stack + Queue]");
             System.out.println("5. Process Next Order [Queue + Dijkstra]");
-            System.out.println("6. Lookup Customer / Order [HashMap]");
+            System.out.println("6. Search Customer / Order [HashMap]");
             System.out.println("7. City Map & Route Finder [Graph + Dijkstra]");
             System.out.println("8. View Pending Order Queue");
             System.out.println("0. Exit");
@@ -26,7 +26,7 @@ public class Main {
                 case 3: menuRider(); break;
                 case 4: break;
                 case 5: break;
-                case 6: break;
+                case 6: menuSearch(); break;
                 case 7: menuMap(); break;
                 case 8: break;
                 case 0: System.out.println("System Shutdown, Byeeeee! <3");break;      
@@ -98,6 +98,23 @@ public class Main {
         }
     }
 
+    public static void menuSearch(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("\n ------- Search Menu -------");
+        System.out.println("1. Search customer by ID");
+        System.out.println("2. Search order by ID");
+        System.out.println("3. Back");
+        System.out.print("Choice: ");
+
+        int choice = readInt(input);
+        switch (choice) {
+            case 1: break;
+            case 2: break;
+            case 3: break;
+            default: System.out.println("Invalid Option");
+        }
+    }
+
     public static void menuMap(){
         Scanner input = new Scanner(System.in);
         System.out.println("\n ------- Map Menu -------");
@@ -145,5 +162,10 @@ public class Main {
     static int readInt(Scanner input){
         try { return Integer.parseInt(input.nextLine().trim());
         } catch (NumberFormatException e) { return -1; }
+    }
+
+    static double readDouble(Scanner input){
+        try { return Double.parseDouble(input.nextLine().trim());
+        } catch (NumberFormatException e) { return -1;}
     }
 }
