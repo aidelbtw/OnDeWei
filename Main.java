@@ -1,11 +1,13 @@
 import java.util.Scanner;
 public class Main {
+    static City city = new City();
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
         int choice = -1;
         while (choice != 0){
-            System.out.println("MAIN MENU");
+            System.out.println("\n------- MAIN MENU -------");
             System.out.println("1. Customer Manager [Linked List]");
             System.out.println("2. Restaurant Manager [Linked List + BST]");
             System.out.println("3. Rider Manager [Priority Queue]");
@@ -25,7 +27,7 @@ public class Main {
                 case 4: break;
                 case 5: break;
                 case 6: break;
-                case 7: break;
+                case 7: menuMap(); break;
                 case 8: break;
                 case 0: System.out.println("System Shutdown, Byeeeee! <3");break;      
                 default: System.out.println("Invalid Choice, Please try again");
@@ -40,6 +42,7 @@ public class Main {
         System.out.println("1. View all customers");
         System.out.println("2. Add new customer");
         System.out.println("3. Remove customer");
+        System.out.println("4. Back");
         System.out.print("Choice: ");
 
         int choice = readInt(input);
@@ -61,6 +64,7 @@ public class Main {
         System.out.println("4. Add new restaurant");
         System.out.println("5. Add food item to restaurant");
         System.out.println("6. Remove a restaurant");
+        System.out.println("7. Back");
         System.out.print("Choice: ");
 
         int choice = readInt(input);
@@ -91,6 +95,50 @@ public class Main {
             case 3: break;
             case 4: break;
             default: System.out.println("Invalid Option");
+        }
+    }
+
+    public static void menuMap(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("\n ------- Map Menu -------");
+        System.out.println("1. Display Map");
+        System.out.println("2. Calculate Shortest Distance");
+        System.out.println("3. Back");
+        System.out.print("Choice: ");
+        
+        int choice = readInt(input);
+        switch (choice){
+            case 1:
+                city.displayMap();
+                break;
+            case 2:
+                city.displayMap();
+                System.out.println("\nAvailable Roads:");
+                for (int i = 0; i < city.N ; i++){
+                    for (int j = i + 1; j < city.N ; j++){
+                        if (city.roads[i][j] > 0){
+                            System.out.print("[" + i + "] " + city.locs[i].name + " -> [" + j +"] " + city.locs[j].name +" ");
+                            System.out.printf("%.1fKM %n", city.roads[i][j]);
+                        }
+                    }
+                }
+
+                System.out.println("\nFind the shortest path between 2 locations:");
+                System.out.print("Start [0-" + (city.N-1) +"]: ");
+                int start = readInt(input);
+                System.out.print("End [0-" + (city.N-1) + "]: ");
+                int end = readInt(input);
+
+                if (start < 0 || start >= city.N || end < 0 || end >= city.N){
+                    System.out.println("Invalid location");
+                }
+                city.dijkstra(start, end);
+                break;
+            case 3:
+                break;
+            default:
+                System.out.println("Invalid Option");
+                break;
         }
     }
 
