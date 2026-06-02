@@ -12,6 +12,6 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        return foodName + " ($" + price + ")";
+        return foodName + " (RM" + price + ")";
     }
 }
