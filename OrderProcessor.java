@@ -4,11 +4,15 @@ public class OrderProcessor {
     private ArrayList<Order> pendingOrdersQueue;
     private ArrayList<OrderItem> cartDraftStack;
     private City city;
+    private DataRetrieval dataRetrieval; 
+    private RiderManager riderManager;
 
-    public OrderProcessor(City city) {
+    public OrderProcessor(City city, DataRetrieval dataRetrieval, RiderManager riderManager) {
         this.pendingOrdersQueue = new ArrayList<>();
         this.cartDraftStack = new ArrayList<>();
         this.city = city;
+        this.dataRetrieval = dataRetrieval;
+        this.riderManager = riderManager;
     }
 
     public void addItemToCart(String foodName, double price) {
@@ -45,6 +49,7 @@ public class OrderProcessor {
 
         Order newOrder = new Order(customerName, restaurantLocId, customerLocId, cartDraftStack);
         pendingOrdersQueue.add(newOrder);
+        dataRetrieval.saveOrder(newOrder.getOrderId(), newOrder.generateSummary());
         cartDraftStack.clear();
         
         System.out.println("Order " + newOrder.getOrderId() + " placed successfully.");
@@ -63,8 +68,43 @@ public class OrderProcessor {
         System.out.println("Customer: " + currentOrder.getCustomerName());
         System.out.printf("Total Amount: RM %.2f%n", currentOrder.getTotalAmount());
         System.out.println("-----------------------------------------");
-        
+
+        System.out.println("Calculating optimal delivery route...");
         city.dijkstra(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId());
+        System.out.println("-----------------------------------------");
+        int restX = city.locs[currentOrder.getRestaurantLocId()].x;
+        int restY = city.locs[currentOrder.getRestaurantLocId()].y;
+
+        for (Rider rider : riderManager.getAllRiders()) {
+            if (rider.isAvailable()) {
+                int riderLocId = rider.getCurrentLocId(); 
+                int riderX = city.locs[riderLocId].x;
+                int riderY = city.locs[riderLocId].y;
+                
+                // Euclidean straight line distance formula application
+                double distance = Math.sqrt(Math.pow(restX - riderX, 2) + Math.pow(restY - riderY, 2));
+                rider.setDistance(distance);
+            }
+        }
+        
+        Rider dispatchedRider = riderManager.assignBestRider(riderManager.getAllRiders());
+        
+        if (dispatchedRider != null) {
+            currentOrder.setAssignedRider(dispatchedRider);
+            currentOrder.setStatus("In Transit");
+            
+            dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
+            
+            System.out.println("Delivering package...");
+            
+            dispatchedRider.completeDelivery(currentOrder.getCustomerLocId());
+            currentOrder.setStatus("Delivered");
+        } else {
+            currentOrder.setStatus("Delayed - No Riders Available");
+            System.out.println("Alert: Dispatch hold placed. Order delayed until a rider logs on.");
+        }
+        
+        dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
         System.out.println("=========================================");
     }
 
