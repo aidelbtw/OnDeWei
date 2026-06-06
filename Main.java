@@ -1,6 +1,8 @@
 import java.util.Scanner;
 public class Main {
     static City city = new City();
+    static RiderManager riderManager = new RiderManager();
+    static DataRetrieval dataRetrieval = new DataRetrieval();
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -98,7 +100,9 @@ public class Main {
         }
     }
 
-    public static void menuSearch(){
+
+// ---- SEARCH MENU (HashMap) ----
+    public static void menuSearch() {
         Scanner input = new Scanner(System.in);
         System.out.println("\n ------- Search Menu -------");
         System.out.println("1. Search customer by ID");
@@ -108,10 +112,20 @@ public class Main {
 
         int choice = readInt(input);
         switch (choice) {
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            default: System.out.println("Invalid Option");
+            case 1:
+                System.out.print("Enter Customer ID: ");
+                String cid = input.nextLine().trim();
+                dataRetrieval.displayUserResult(cid);
+                break;
+            case 2:
+                System.out.print("Enter Order ID: ");
+                String oid = input.nextLine().trim();
+                dataRetrieval.displayOrderResult(oid);
+                break;
+            case 3:
+                break;
+            default:
+                System.out.println("Invalid Option");
         }
     }
 
