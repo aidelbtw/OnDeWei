@@ -61,7 +61,7 @@ public class OrderProcessor {
         System.out.println("\n=========================================");
         System.out.println("Processing Order ID: " + currentOrder.getOrderId());
         System.out.println("Customer: " + currentOrder.getCustomerName());
-        System.out.printf("Total Amount: $%.2f%n", currentOrder.getTotalAmount());
+        System.out.printf("Total Amount: RM %.2f%n", currentOrder.getTotalAmount());
         System.out.println("-----------------------------------------");
         
         city.dijkstra(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId());
