@@ -16,6 +16,10 @@ public class Rider implements Comparable<Rider>{
     public String getName() { return this.name; }
     public double getDistance() {return this.distanceToRestaurant;}
     public boolean isAvailable() {return this.isAvailable; }
+
+    public int getCurrentLocId() { 
+        return this.currentLocId; 
+    }
     
     public void setDistance(double calculatedDistance) {
         this.distanceToRestaurant = calculatedDistance;

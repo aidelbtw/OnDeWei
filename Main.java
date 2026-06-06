@@ -3,6 +3,7 @@ public class Main {
     static City city = new City();
     static RiderManager riderManager = new RiderManager();
     static DataRetrieval dataRetrieval = new DataRetrieval();
+    static OrderProcessor orderProcessor = new OrderProcessor(city, dataRetrieval, riderManager);
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -26,11 +27,11 @@ public class Main {
                 case 1: menuCustomer(); break;
                 case 2: menuRestaurant(); break;
                 case 3: menuRider(); break;
-                case 4: break;
-                case 5: break;
+                case 4: menuPlaceOrder(input); break;
+                case 5: orderProcessor.processNextOrder(); break;
                 case 6: menuSearch(); break;
                 case 7: menuMap(); break;
-                case 8: break;
+                case 8: orderProcessor.displayPendingOrders(); break;
                 case 0: System.out.println("System Shutdown, Byeeeee! <3");break;      
                 default: System.out.println("Invalid Choice, Please try again");
             }
@@ -99,7 +100,70 @@ public class Main {
             default: System.out.println("Invalid Option");
         }
     }
-
+    
+    public static void menuPlaceOrder(Scanner input) {
+            System.out.println("\n------- PLACE AN ORDER -------");
+            System.out.print("Enter Customer Name: ");
+            String customerName = input.nextLine().trim();
+    
+            System.out.print("Enter Customer Location Node ID (0-" + (city.N - 1) + "): ");
+            int custLoc = readInt(input);
+            System.out.print("Enter Restaurant Location Node ID (0-" + (city.N - 1) + "): ");
+            int restLoc = readInt(input);
+    
+            if (custLoc < 0 || custLoc >= city.N || restLoc < 0 || restLoc >= city.N) {
+                System.out.println("Invalid location boundaries. Session canceled.");
+                return;
+            }
+    
+            boolean shopping = true;
+            while (shopping) {
+                System.out.println("\n--- Shopping Cart Workspace (LIFO) ---");
+                System.out.println("1. Add Item to Cart");
+                System.out.println("2. Undo Last Item (Stack Pop)");
+                System.out.println("3. View Current Cart");
+                System.out.println("4. Confirm & Checkout (Push to Queue)");
+                System.out.println("5. Cancel Order");
+                System.out.print("Action: ");
+                
+                int cartChoice = readInt(input);
+                switch (cartChoice) {
+                    case 1:
+                        System.out.print("Enter Food Name: ");
+                        String foodName = input.nextLine().trim();
+                        System.out.print("Enter Price (RM): ");
+                        double price = readDouble(input);
+                        if (price > 0) {
+                            orderProcessor.addItemToCart(foodName, price);
+                        } else {
+                            System.out.println("Invalid price entry.");
+                        }
+                        break;
+                        
+                    case 2:
+                        orderProcessor.undoLastItem();
+                        break;
+                        
+                    case 3:
+                        orderProcessor.viewCart();
+                        break;
+                        
+                    case 4:
+                        orderProcessor.confirmAndPlaceOrder(customerName, restLoc, custLoc);
+                        shopping = false;
+                        break;
+                        
+                    case 5:
+                        System.out.println("Shopping cart abandoned.");
+                        shopping = false;
+                        break;
+                        
+                    default:
+                        System.out.println("Invalid workspace option.");
+                        break;
+                }
+            }
+        }
 
 // ---- SEARCH MENU (HashMap) ----
     public static void menuSearch() {
