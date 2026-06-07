@@ -6,7 +6,7 @@ public class Rider implements Comparable<Rider>{
     private boolean isAvailable;
     
     public Rider(String id, String name, int currentLocation) {
-        this.id= id;
+        this.id = id;
         this.name = name;
         this.currentLocId = currentLocation;
         this.distanceToRestaurant = Double.MAX_VALUE;
@@ -14,8 +14,9 @@ public class Rider implements Comparable<Rider>{
     }
     
     public String getName() { return this.name; }
-    public double getDistance() {return this.distanceToRestaurant;}
-    public boolean isAvailable() {return this.isAvailable; }
+    public double getDistance() { return this.distanceToRestaurant; }
+    public boolean isAvailable() { return this.isAvailable; }
+    public String getId() { return this.id; }
 
     public int getCurrentLocId() { 
         return this.currentLocId; 

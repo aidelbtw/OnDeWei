@@ -93,6 +93,13 @@ public class City {
         }
     }
 
+    public String getLocationName(int locID){
+        if (locID < 0 || locID >= N){
+            return "Unknown";
+        }
+        return locs[locID].name;
+    }
+
     public void dijkstra(int start, int end){
         double[] dist = new double[N];
         int[] prev = new int[N];

@@ -15,6 +15,22 @@ public class RiderManager {
     public ArrayList<Rider> getAllRiders() {
         return this.allRidersList;
     }
+
+    public void displayRiders(){
+        if (allRidersList.isEmpty()){
+            System.out.println("No riders registered");
+            return;
+        }
+
+        System.out.println("\n----- Riders");
+        for (Rider rider : allRidersList){
+            String status = rider.isAvailable() ? "Available" : "On delivery" ;
+            System.out.println("ID: " + rider.getId() + "Name: " + rider.getName() + 
+                               "| Location: " + DataManagementModule.city.getLocationName(rider.getCurrentLocId()) +
+                               " [" + rider.getCurrentLocId() + "] | Status");
+
+        }
+    }
     
     public Rider assignBestRider(ArrayList<Rider> riders){
         PriorityQueue<Rider> assignmentQueue = new PriorityQueue<>();

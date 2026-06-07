@@ -1,15 +1,16 @@
 import java.util.ArrayList;
+
 public class DataManagementModule {
-    
+    static City city = new City();
 }
 
 // 2. USER DATA BLUEPRINT
 class User {
     private String userId;
     private String name;
-    private String location;
+    private int location;
 
-    public User(String userId, String name, String location) {
+    public User(String userId, String name, int location) {
         this.userId = userId;
         this.name = name;
         this.location = location;
@@ -17,24 +18,39 @@ class User {
 
     public String getUserId() { return userId; }
     public String getName() { return name; }
-    public String getLocation() { return location; }
+    public int getLocation() { return location; }
 }
 
 // 3. RESTAURANT DATA BLUEPRINT
 class Restaurant {
     private String restaurantId;
     private String name;
-    private String location;
+    private int location;
+    private FoodBST menu;    
 
-    public Restaurant(String restaurantId, String name, String location) {
+    public Restaurant(String restaurantId, String name, int location) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.location = location;
+        this.menu = new FoodBST();
     }
 
     public String getRestaurantId() { return restaurantId; }
     public String getName() { return name; }
-    public String getLocation() { return location; }
+    public int getLocation() { return location; }
+    public FoodBST getMenu() { return menu;}
+
+    public void addFood(FoodItem food){
+        menu.insert(food);
+    }
+
+    public void displayMenu(){
+        menu.displayMenu();
+    }
+
+    public FoodItem searchFood(String name){
+        return menu.search(name);
+    }
 }
 
 // 4. USER NODE
@@ -96,8 +112,13 @@ class UserLinkedList {
 
     public void displayUsers() {
         UserNode current = head;
+        if (current == null){
+            System.out.println("\nThere are no registered customers");
+        }
         while (current != null) {
-            System.out.println("ID: " + current.userData.getUserId() + " | Name: " + current.userData.getName());
+            System.out.println("ID: " + current.userData.getUserId() + " | Name: " + current.userData.getName() + 
+                                " | Location: " + DataManagementModule.city.getLocationName(current.userData.getLocation()) + 
+                                "[" + current.userData.getLocation() + "]");
             current = current.next;
         }
     }
@@ -138,10 +159,24 @@ class RestaurantLinkedList {
         }
     }
 
+    public Restaurant findRestaurant(String id){
+        RestaurantNode current = head;
+        
+        while (current != null){
+            if (current.restaurantData.getRestaurantId().equals(id)){
+                return current.restaurantData;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
     public void displayRestaurants() {
         RestaurantNode current = head;
         while (current != null) {
-            System.out.println("ID: " + current.restaurantData.getRestaurantId() + " | Name: " + current.restaurantData.getName());
+            System.out.println("ID: " + current.restaurantData.getRestaurantId() + " | Name: " + current.restaurantData.getName() +
+                               "| Location: " + DataManagementModule.city.getLocationName(current.restaurantData.getLocation()) +
+                               " [" + current.restaurantData.getLocation()+ "]");
             current = current.next;
         }
     }
