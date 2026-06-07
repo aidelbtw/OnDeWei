@@ -3,6 +3,9 @@ public class Main {
     static City city = new City();
     static RiderManager riderManager = new RiderManager();
     static DataRetrieval dataRetrieval = new DataRetrieval();
+    static DataManagementModule dm = new DataManagementModule();
+    static UserLinkedList users = new UserLinkedList();
+    static RestaurantLinkedList restaurants = new RestaurantLinkedList();
     static OrderProcessor orderProcessor = new OrderProcessor(city, dataRetrieval, riderManager);
 
     public static void main(String[] args) {
@@ -50,9 +53,33 @@ public class Main {
 
         int choice = readInt(input);
         switch (choice){
-            case 1: break;
-            case 2: break;
-            case 3: break;
+            case 1: users.displayUsers(); 
+                break;
+
+            case 2: System.out.print("Enter Customer ID: ");
+                    String id = input.nextLine();
+                    System.out.print("Enter Customer Name: ");
+                    String name = input.nextLine();
+                    city.displayMap();
+                    System.out.print("Enter Customer Location: ");
+                    int location = readInt(input);
+                    if (location < 0 || location >= city.N){
+                        System.out.println("Invalid location");
+                        return;
+                    }
+                    User user = new User(id, name, location);
+                    users.addUser(user);
+                    dataRetrieval.registerUser(user);
+                break;
+
+            case 3: System.out.print("Customer ID to remove: ");
+                    String remove = input.nextLine();
+                    
+                    users.removeUserById(remove);
+                    dataRetrieval.removeUser(remove);
+                    System.out.println("Customer Succesfully removed");
+                break;
+
             case 4: break;
             default: System.out.println("Invalid Option");
         }
@@ -75,8 +102,39 @@ public class Main {
             case 1: break;
             case 2: break;
             case 3: break;
-            case 4: break;
-            case 5: break;
+            case 4: System.out.print("Enter Restaurant ID: ");
+                    String id = input.nextLine();
+                    System.out.print("Enter Restaurant Name: ");
+                    String name = input.nextLine();
+                    city.displayMap();
+                    System.out.print("Enter Location ID: ");
+                    int loc = readInt(input);
+
+                    Restaurant r = new Restaurant(id, name, loc);
+                    restaurants.addRestaurant(r);
+                break;
+
+            case 5: System.out.print("Enter Restaurant ID: ");
+                    String rid = input.nextLine(); 
+                    
+                    Restaurant restaurant = restaurants.findRestaurant(rid);
+                    if (restaurant == null){
+                        System.out.println("Restaurant not Found");
+                        break;
+                    }
+
+                    System.out.println("Food Name: ");
+                    String foodName = input.nextLine();
+
+                    System.out.println("Price: ");
+                    double price = readDouble(input);
+
+                    System.out.println("Category: ");
+                    String category = input.nextLine();
+
+                    restaurant.addFood(new FoodItem(foodName, price, category));
+                    System.out.println("Food added");
+                break;
             case 6: break;
             case 7: break;
             default: System.out.println("Invalid Option");
@@ -93,8 +151,17 @@ public class Main {
 
         int choice = readInt(input);
         switch (choice){
-            case 1: break;
-            case 2: break;
+            case 1: riderManager.displayRiders(); break;
+            case 2: System.out.print("Rider ID: ");
+                    String riderID = input.nextLine();
+                    System.out.println("Rider Name: ");
+                    String riderName = input.nextLine();
+                    city.displayMap();
+                    System.out.println("Current Location ID: ");
+                    int location = readInt(input);
+                    
+                    riderManager.addRider(new Rider(riderID, riderName, location));
+                break;
             case 3: break;
             case 4: break;
             default: System.out.println("Invalid Option");
