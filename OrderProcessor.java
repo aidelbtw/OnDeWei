@@ -41,6 +41,23 @@ public class OrderProcessor {
         }
     }
 
+    public void removeItem(String foodName){
+
+    for(int i = 0; i < cartDraftStack.size(); i++){
+
+        if(cartDraftStack.get(i).getFoodName()
+            .equalsIgnoreCase(foodName)){
+
+            cartDraftStack.remove(i);
+
+            System.out.println(foodName + " removed");
+            return;
+        }
+    }
+
+    System.out.println("Item not found in cart");
+}
+
     public void confirmAndPlaceOrder(String customerName, int restaurantLocId, int customerLocId) {
         if (cartDraftStack.isEmpty()) {
             System.out.println("Cannot place an empty order!");
