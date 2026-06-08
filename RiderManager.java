@@ -41,6 +41,15 @@ public class RiderManager {
         }
         return false;
     }
+
+    public Rider findRider(String riderID){
+        for(Rider rider : allRidersList){
+            if(rider.getId().equalsIgnoreCase(riderID)){
+                return rider;
+            }
+        }
+        return null;
+    }
     
     public Rider assignBestRider(ArrayList<Rider> riders){
         PriorityQueue<Rider> assignmentQueue = new PriorityQueue<>();

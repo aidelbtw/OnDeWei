@@ -43,7 +43,7 @@ class Restaurant {
     }
 
     public boolean removeFood(String foodName){
-    return menu.delete(foodName);
+    return menu.delete(foodName);   
 }
 
     public void displayMenu(){
@@ -120,7 +120,7 @@ class UserLinkedList {
         while (current != null) {
             System.out.println("ID: " + current.userData.getUserId() + " | Name: " + current.userData.getName() + 
                                 " | Location: " + DataManagementModule.city.getLocationName(current.userData.getLocation()) + 
-                                "[" + current.userData.getLocation() + "]");
+                                " [" + current.userData.getLocation() + "]");
             current = current.next;
         }
     }
