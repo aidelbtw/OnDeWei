@@ -90,6 +90,7 @@ public class OrderProcessor {
         Rider dispatchedRider = riderManager.assignBestRider(riderManager.getAllRiders());
         
         if (dispatchedRider != null) {
+            dispatchedRider.onDelivery(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId(), city);
             currentOrder.setAssignedRider(dispatchedRider);
             currentOrder.setStatus("In Transit");
             

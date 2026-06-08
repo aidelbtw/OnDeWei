@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class DataManagementModule {
     static City city = new City();
 }
@@ -26,26 +24,30 @@ class Restaurant {
     private String restaurantId;
     private String name;
     private int location;
-    private FoodBST menu;    
+    private MenuBST menu;    
 
     public Restaurant(String restaurantId, String name, int location) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.location = location;
-        this.menu = new FoodBST();
+        this.menu = new MenuBST();
     }
 
     public String getRestaurantId() { return restaurantId; }
     public String getName() { return name; }
     public int getLocation() { return location; }
-    public FoodBST getMenu() { return menu;}
+    public MenuBST getMenu() { return menu;}
 
     public void addFood(FoodItem food){
         menu.insert(food);
     }
 
+    public boolean removeFood(String foodName){
+    return menu.delete(foodName);
+}
+
     public void displayMenu(){
-        menu.displayMenu();
+        menu.displayMenuInOrder();
     }
 
     public FoodItem searchFood(String name){
@@ -90,7 +92,7 @@ class UserLinkedList {
             }
             current.next = newNode;
         }
-        System.out.println("User added successfully!");
+        System.out.println("\nUser added successfully!");
     }
 
     public void removeUserById(String id) {
@@ -139,14 +141,14 @@ class RestaurantLinkedList {
             }
             current.next = newNode;
         }
-        System.out.println("Restaurant added successfully!");
+        System.out.println("\nRestaurant added successfully!");
     }
 
-    public void removeRestaurantById(String id) {
-        if (head == null) return;
+    public boolean removeRestaurantById(String id) {
+        if (head == null) return false;
         if (head.restaurantData.getRestaurantId().equals(id)) {
             head = head.next;
-            return;
+            return true;
         }
         RestaurantNode current = head;
         RestaurantNode previous = null;
@@ -154,9 +156,10 @@ class RestaurantLinkedList {
             previous = current;
             current = current.next;
         }
-        if (current != null) {
-            previous.next = current.next;
-        }
+
+        if (current == null) return false;
+        previous.next = current.next;
+        return true;
     }
 
     public Restaurant findRestaurant(String id){
@@ -173,9 +176,14 @@ class RestaurantLinkedList {
 
     public void displayRestaurants() {
         RestaurantNode current = head;
+        if (current == null){
+            System.out.println("\nNo Restaurants Registered");
+            return;
+        }
+        System.out.println();
         while (current != null) {
             System.out.println("ID: " + current.restaurantData.getRestaurantId() + " | Name: " + current.restaurantData.getName() +
-                               "| Location: " + DataManagementModule.city.getLocationName(current.restaurantData.getLocation()) +
+                               " | Location: " + DataManagementModule.city.getLocationName(current.restaurantData.getLocation()) +
                                " [" + current.restaurantData.getLocation()+ "]");
             current = current.next;
         }

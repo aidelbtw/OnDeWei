@@ -52,7 +52,6 @@ public class MenuBST {
             return;
         }
         System.out.printf("  %-20s | %-15s | %s%n", "Food Name", "Category", "Price");
-        System.out.println("  " + "-".repeat(50));
         inOrderRec(root);
     }
 
