@@ -35,7 +35,7 @@ public class Order {
     public double getTotalAmount() {
         double total = 0;
         for (OrderItem item : items) {
-            total += item.getPrice();
+            total += item.getSubtotal();
         }
         return total;
     }

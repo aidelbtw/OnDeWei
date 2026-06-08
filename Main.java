@@ -253,7 +253,9 @@ public class Main {
         System.out.println("1. View all riders");
         System.out.println("2. Add new rider");
         System.out.println("3. Simulate: show priority order to a restaurant");
-        System.out.println("4. Remove a rider");
+        System.out.println("4. Complete Delivery");
+        System.out.println("5. Remove a rider");
+        System.out.println("6. Back");
         System.out.print("Choice: ");
 
         int choice = readInt(input);
@@ -283,15 +285,67 @@ public class Main {
                 riderManager.addRider(new Rider(riderID, riderName, location));
                 break;
 
-            case 3: break;
-            case 4: 
+            case 3: 
+                restaurants.displayRestaurants();
+
+                System.out.print("Enter Restaurant ID: ");
+                String restId = input.nextLine();
+
+                Restaurant restaurant = restaurants.findRestaurant(restId);
+
+                if(restaurant == null){
+                    System.out.println("Restaurant not found");
+                    break;
+                }
+
+                int restLoc = restaurant.getLocation();
+
+                int restX = city.locs[restLoc].x;
+                int restY = city.locs[restLoc].y;
+
+                for(Rider rider : riderManager.getAllRiders()){
+
+                    int riderLoc = rider.getCurrentLocId();
+
+                    int riderX = city.locs[riderLoc].x;
+                    int riderY = city.locs[riderLoc].y;
+
+                    double distance =
+                        Math.sqrt(Math.pow(restX-riderX,2)
+                        + Math.pow(restY-riderY,2));
+
+                    rider.setDistance(distance);
+                }
+
+                riderManager.showPriorityQueue();
+
+                break;
+
+            case 4:
+                riderManager.displayBusyRiders();
+                System.out.print("\nEnter Rider ID: ");
+                String riderId = input.nextLine();
+                Rider rider = riderManager.findRider(riderId);
+                if(rider == null){
+                    System.out.println("Rider not found");
+                    break;
+                }
+                if(rider.isAvailable()){
+                    System.out.println("This rider is not currently delivering.");
+                    break;
+                }
+                rider.completeDelivery();
+                break;
+            case 5: 
                 System.out.print("Enter Rider ID to be removed: ");
-                String id = input.nextLine();
-                if(riderManager.removeRider(id))
+                String riderid = input.nextLine();
+                if(riderManager.removeRider(riderid))
                     System.out.println("Rider removed");
                 else
                     System.out.println("Rider not found");
                 break;
+            
+            case 6: break;
             default: System.out.println("Invalid Option");
         }
     }
@@ -349,8 +403,7 @@ public class Main {
                 System.out.println("2. Undo Last Item (Stack Pop)");
                 System.out.println("3. View Current Cart");
                 System.out.println("4. Confirm & Checkout (Push to Queue)");
-                System.out.println("5. Remove Item");
-                System.out.println("6. Cancel Order");
+                System.out.println("5. Cancel Order");
                 System.out.print("Action: ");
                 
                 int cartChoice = readInt(input);
@@ -365,7 +418,9 @@ public class Main {
                             System.out.println("Item not found");
                             break;
                         }
-                        orderProcessor.addItemToCart(food.getName(), food.getPrice());
+                        System.out.print("Quantity: ");
+                        int qty = readInt(input);
+                        orderProcessor.addItemToCart(food.getName(), food.getPrice(),qty);
                         break;
                         
                     case 2:
@@ -382,14 +437,6 @@ public class Main {
                         break;
 
                     case 5:
-                        System.out.println("Food name to remove: ");
-                        String removedFood = input.nextLine();
-                        
-                        orderProcessor.removeItem(removedFood);
-                        break;
-
-
-                    case 6:
                         System.out.println("Shopping cart abandoned.");
                         shopping = false;
                         break;

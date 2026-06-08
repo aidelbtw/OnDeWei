@@ -15,8 +15,8 @@ public class OrderProcessor {
         this.riderManager = riderManager;
     }
 
-    public void addItemToCart(String foodName, double price) {
-        OrderItem item = new OrderItem(foodName, price);
+    public void addItemToCart(String foodName, double price, int quantity) {
+        OrderItem item = new OrderItem(foodName, price, quantity);
         cartDraftStack.add(item);
         System.out.println("Added to cart: " + item);
     }
@@ -35,10 +35,14 @@ public class OrderProcessor {
             System.out.println("Your cart is empty.");
             return;
         }
+        double total = 0;
         System.out.println("--- Current Cart ---");
-        for (int i = cartDraftStack.size() - 1; i >= 0; i--) {
-            System.out.println("- " + cartDraftStack.get(i));
+        for (OrderItem item : cartDraftStack){
+            System.out.println(item);
+            total += item.getSubtotal();
         }
+
+        System.out.printf("Total: RM%.2f%n" , total);
     }
 
     public void removeItem(String foodName){
@@ -113,10 +117,7 @@ public class OrderProcessor {
             
             dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
             
-            System.out.println("Delivering package...");
-            
-            dispatchedRider.completeDelivery(currentOrder.getCustomerLocId());
-            currentOrder.setStatus("Delivered");
+            System.out.println("OnDeWei!!!");
         } else {
             currentOrder.setStatus("Delayed - No Riders Available");
             System.out.println("Alert: Dispatch hold placed. Order delayed until a rider logs on.");

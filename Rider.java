@@ -5,6 +5,7 @@ public class Rider implements Comparable<Rider>{
     private double distanceToRestaurant;
     private boolean isAvailable;
     private String currentTask;
+    private int destinationLocId = -1;
     
     public Rider(String id, String name, int currentLocation) {
         this.id = id;
@@ -19,6 +20,7 @@ public class Rider implements Comparable<Rider>{
     public double getDistance() { return this.distanceToRestaurant; }
     public boolean isAvailable() { return this.isAvailable; }
     public String getId() { return this.id; }
+    public int getDestinationLocId() { return this.destinationLocId;}
 
     public int getCurrentLocId() { 
         return currentLocId; 
@@ -42,14 +44,15 @@ public class Rider implements Comparable<Rider>{
          this.currentTask = "Picking up : " + start + " -> " + destination + " | Delivering to: " + customer;  
     }
     
-    public void completeDelivery(int custLocId) {
-        currentLocId = custLocId;
+    public void completeDelivery() {
+        currentLocId = destinationLocId;
+        destinationLocId = -1;
         distanceToRestaurant = Double.MAX_VALUE;
         isAvailable = true;
         currentTask = "None";
         
-        System.out.println(name + " completed delivery and is now at location: " + DataManagementModule.city.getLocationName(currentLocId) +
-                           " [" + currentLocId + "]");
+        System.out.println(name + " completed delivery and is now at location: " + 
+                           DataManagementModule.city.getLocationName(currentLocId) + " [" + currentLocId + "]");
     }
     
     @Override
