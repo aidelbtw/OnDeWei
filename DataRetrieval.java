@@ -22,9 +22,9 @@ public class DataRetrieval {
     public void removeUser(String userId) {
         if (userMap.containsKey(userId)) {
             userMap.remove(userId);
-            System.out.println("User " + userId + " removed from records.");
+            System.out.println("\nUser " + userId + " removed from records.");
         } else {
-            System.out.println("User not found.");
+            System.out.println("\nUser not found.");
         }
     }
 
@@ -39,7 +39,7 @@ public class DataRetrieval {
             System.out.println("\n  --- Customer Found ---");
             System.out.println("  ID       : " + u.getUserId());
             System.out.println("  Name     : " + u.getName());
-            System.out.println("  Location : " + u.getLocation());
+            System.out.println("  Location : " + DataManagementModule.city.getLocationName(u.getLocation()) + " [" + u.getLocation() + "]");
         } else {
             System.out.println("  No customer found with ID: " + userId);
         }
@@ -55,9 +55,9 @@ public class DataRetrieval {
     public void removeOrder(String orderId) {
         if (orderMap.containsKey(orderId)) {
             orderMap.remove(orderId);
-            System.out.println("Order " + orderId + " removed.");
+            System.out.println("\nOrder " + orderId + " removed.");
         } else {
-            System.out.println("Order not found.");
+            System.out.println("\nOrder not found.");
         }
     }
 
@@ -72,7 +72,7 @@ public class DataRetrieval {
             System.out.println("\n  --- Order Found ---");
             System.out.println(summary);
         } else {
-            System.out.println("  No order found with ID: " + orderId);
+            System.out.println("\nNo order found with ID: " + orderId);
         }
     }
 

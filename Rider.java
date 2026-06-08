@@ -4,6 +4,7 @@ public class Rider implements Comparable<Rider>{
     private int currentLocId;
     private double distanceToRestaurant;
     private boolean isAvailable;
+    private String currentTask;
     
     public Rider(String id, String name, int currentLocation) {
         this.id = id;
@@ -11,6 +12,7 @@ public class Rider implements Comparable<Rider>{
         this.currentLocId = currentLocation;
         this.distanceToRestaurant = Double.MAX_VALUE;
         this.isAvailable = true;
+        this.currentTask = "None";
     }
     
     public String getName() { return this.name; }
@@ -19,27 +21,39 @@ public class Rider implements Comparable<Rider>{
     public String getId() { return this.id; }
 
     public int getCurrentLocId() { 
-        return this.currentLocId; 
+        return currentLocId; 
+    }
+
+    public String getCurrentTask(){
+        return currentTask;
     }
     
     public void setDistance(double calculatedDistance) {
-        this.distanceToRestaurant = calculatedDistance;
+        distanceToRestaurant = calculatedDistance;
     }
     
-    public void onDelivery() {
-        this.isAvailable = false;
+    public void onDelivery(int restaurantLocId, int customerLocId, City city) {
+         isAvailable = false;
+
+         String start = city.getLocationName(currentLocId);
+         String destination = city.getLocationName(restaurantLocId);
+         String customer = city.getLocationName(customerLocId);
+
+         this.currentTask = "Picking up : " + start + " -> " + destination + " | Delivering to: " + customer;  
     }
     
     public void completeDelivery(int custLocId) {
-        this.currentLocId = custLocId;
-        this.distanceToRestaurant = Double.MAX_VALUE;
-        this.isAvailable = true;
+        currentLocId = custLocId;
+        distanceToRestaurant = Double.MAX_VALUE;
+        isAvailable = true;
+        currentTask = "None";
         
-        System.out.println(this.name + " completed delivery and is now at location: " + this.currentLocId);
+        System.out.println(name + " completed delivery and is now at location: " + DataManagementModule.city.getLocationName(currentLocId) +
+                           " [" + currentLocId + "]");
     }
     
     @Override
     public int compareTo(Rider o) {
-        return Double.compare(this.distanceToRestaurant, o.distanceToRestaurant);
+        return Double.compare(distanceToRestaurant, o.distanceToRestaurant);
     }
 }

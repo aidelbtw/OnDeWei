@@ -25,11 +25,21 @@ public class RiderManager {
         System.out.println("\n----- Riders");
         for (Rider rider : allRidersList){
             String status = rider.isAvailable() ? "Available" : "On delivery" ;
-            System.out.println("ID: " + rider.getId() + "Name: " + rider.getName() + 
-                               "| Location: " + DataManagementModule.city.getLocationName(rider.getCurrentLocId()) +
-                               " [" + rider.getCurrentLocId() + "] | Status");
+            System.out.println("ID: " + rider.getId() + " | Name: " + rider.getName() + 
+                               " | Location: " + DataManagementModule.city.getLocationName(rider.getCurrentLocId()) +
+                               " [" + rider.getCurrentLocId() + "] | Status: " + status + " | Task: " +rider.getCurrentTask());
 
         }
+    }
+
+    public boolean removeRider(String riderId) {
+        for (int i = 0; i < allRidersList.size(); i++) {
+            if (allRidersList.get(i).getId().equals(riderId)) {
+                allRidersList.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
     
     public Rider assignBestRider(ArrayList<Rider> riders){
@@ -45,7 +55,6 @@ public class RiderManager {
             return null;
         }
         Rider bestRider = assignmentQueue.poll();
-        bestRider.onDelivery();
         System.out.println("---RIDER FOUND!---\n Dispatching: " + bestRider.getName() + " (Distance to Restaurant: " + bestRider.getDistance() + " km");
         return bestRider;
     }

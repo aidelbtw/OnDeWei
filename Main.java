@@ -56,28 +56,29 @@ public class Main {
             case 1: users.displayUsers(); 
                 break;
 
-            case 2: System.out.print("Enter Customer ID: ");
-                    String id = input.nextLine();
-                    System.out.print("Enter Customer Name: ");
-                    String name = input.nextLine();
-                    city.displayMap();
-                    System.out.print("Enter Customer Location: ");
-                    int location = readInt(input);
-                    if (location < 0 || location >= city.N){
-                        System.out.println("Invalid location");
-                        return;
-                    }
-                    User user = new User(id, name, location);
-                    users.addUser(user);
-                    dataRetrieval.registerUser(user);
+            case 2: 
+                System.out.print("Enter Customer ID: ");
+                String id = input.nextLine();
+                System.out.print("Enter Customer Name: ");
+                String name = input.nextLine();
+                city.displayMap();
+                System.out.print("Enter Customer Location: ");
+                int location = readInt(input);
+                if (location < 0 || location >= city.N){
+                    System.out.println("Invalid location");
+                    return;
+                }
+                User user = new User(id, name, location);
+                users.addUser(user);
+                dataRetrieval.registerUser(user);
                 break;
 
-            case 3: System.out.print("Customer ID to remove: ");
-                    String remove = input.nextLine();
-                    
-                    users.removeUserById(remove);
-                    dataRetrieval.removeUser(remove);
-                    System.out.println("Customer Succesfully removed");
+            case 3: 
+                System.out.print("Customer ID to remove: ");
+                String remove = input.nextLine();
+                
+                users.removeUserById(remove);
+                dataRetrieval.removeUser(remove);
                 break;
 
             case 4: break;
@@ -94,49 +95,117 @@ public class Main {
         System.out.println("4. Add new restaurant");
         System.out.println("5. Add food item to restaurant");
         System.out.println("6. Remove a restaurant");
-        System.out.println("7. Back");
+        System.out.println("7. Remove food item");
+        System.out.println("8. Back");
         System.out.print("Choice: ");
 
         int choice = readInt(input);
         switch (choice){
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: System.out.print("Enter Restaurant ID: ");
-                    String id = input.nextLine();
-                    System.out.print("Enter Restaurant Name: ");
-                    String name = input.nextLine();
-                    city.displayMap();
-                    System.out.print("Enter Location ID: ");
-                    int loc = readInt(input);
-
-                    Restaurant r = new Restaurant(id, name, loc);
-                    restaurants.addRestaurant(r);
+            case 1: restaurants.displayRestaurants();
                 break;
 
-            case 5: System.out.print("Enter Restaurant ID: ");
-                    String rid = input.nextLine(); 
-                    
-                    Restaurant restaurant = restaurants.findRestaurant(rid);
-                    if (restaurant == null){
-                        System.out.println("Restaurant not Found");
-                        break;
-                    }
-
-                    System.out.println("Food Name: ");
-                    String foodName = input.nextLine();
-
-                    System.out.println("Price: ");
-                    double price = readDouble(input);
-
-                    System.out.println("Category: ");
-                    String category = input.nextLine();
-
-                    restaurant.addFood(new FoodItem(foodName, price, category));
-                    System.out.println("Food added");
+            case 2: 
+                System.out.print("Enter Restaurant ID: ");
+                String rid = input.nextLine();
+                Restaurant r = restaurants.findRestaurant(rid);
+                if (r == null){
+                    System.out.println("Restaurant not found");
+                    break;}
+                System.out.println(" ----- " + r.getName() + " -----");
+                r.displayMenu();
                 break;
-            case 6: break;
-            case 7: break;
+
+            case 3: 
+                System.out.print("Enter Restaurant ID: ");
+                String resID = input.nextLine();
+                Restaurant rest = restaurants.findRestaurant(resID);
+
+                if(rest == null){
+                    System.out.println("Restaurant not found");
+                    break;
+                }
+                System.out.println("Searching in " + rest.getName());
+                System.out.print("Enter Food Name: ");
+                String food = input.nextLine();
+
+                FoodItem item = rest.searchFood(food);  
+                if(item != null){
+                    System.out.println(item);
+                } else
+                    System.out.println("Food not found");
+                break;
+
+            case 4: 
+                System.out.print("Enter Restaurant ID: ");
+                String id = input.nextLine();
+                System.out.print("Enter Restaurant Name: ");
+                String name = input.nextLine();
+                city.displayMap();
+                System.out.print("Enter Location ID: ");
+                int loc = readInt(input);
+                if (loc < 0 || loc >= city.N){
+                    System.out.println("Invalid Location");
+                    break;
+                }
+
+                Restaurant restaurant = new Restaurant(id, name, loc);
+                restaurants.addRestaurant(restaurant);
+                break;
+
+            case 5: 
+                System.out.print("Enter Restaurant ID: ");
+                String idToAdd = input.nextLine(); 
+                
+                Restaurant restoran = restaurants.findRestaurant(idToAdd);
+                if (restoran == null){
+                    System.out.println("\nRestaurant not Found");
+                    break;
+                }
+                System.out.println("Adding food to: " + restoran.getName());
+                System.out.print("\nFood Name: ");
+                String foodName = input.nextLine();
+
+                System.out.print("Price: ");
+                double price = readDouble(input);
+
+                System.out.print("Category: ");
+                String category = input.nextLine();
+
+                restoran.addFood(new FoodItem(foodName, price, category));
+                System.out.println("Food added successfully");
+                break;
+
+            case 6: 
+                System.out.print("Enter Restaurant ID to remove: ");
+                String remove = input.nextLine();
+                if(restaurants.removeRestaurantById(remove)){
+                    System.out.println("Restaurant removed");
+                } else {
+                    System.out.println("Restaurant was not found");
+                }
+                System.out.println("");break;
+
+            case 7: 
+                System.out.print("Enter Restaurant ID to remove item from: "); 
+                String removeFrom = input.nextLine();
+
+                Restaurant resta = restaurants.findRestaurant(removeFrom);
+
+                if(resta == null){
+                    System.out.println("Restaurant not found");
+                    break;
+                }
+
+                System.out.print("Item Name to Remove: ");
+                String removeItem = input.nextLine();
+
+                if(resta.removeFood(removeItem)){
+                    System.out.println("Item removed");
+                }
+                else{
+                    System.out.println("Item not found");
+                }break;
+            case 8: break;
             default: System.out.println("Invalid Option");
         }
     }
@@ -147,23 +216,41 @@ public class Main {
         System.out.println("1. View all riders");
         System.out.println("2. Add new rider");
         System.out.println("3. Simulate: show priority order to a restaurant");
+        System.out.println("4. Remove a rider");
         System.out.print("Choice: ");
 
         int choice = readInt(input);
         switch (choice){
-            case 1: riderManager.displayRiders(); break;
-            case 2: System.out.print("Rider ID: ");
-                    String riderID = input.nextLine();
-                    System.out.println("Rider Name: ");
-                    String riderName = input.nextLine();
-                    city.displayMap();
-                    System.out.println("Current Location ID: ");
-                    int location = readInt(input);
-                    
-                    riderManager.addRider(new Rider(riderID, riderName, location));
+            case 1: 
+                riderManager.displayRiders(); 
                 break;
+                
+            case 2: 
+                System.out.print("Enter Rider ID: ");
+                String riderID = input.nextLine();
+                System.out.print("Enter Rider Name: ");
+                String riderName = input.nextLine();
+                city.displayMap();
+                System.out.println("Current Location ID: ");
+                int location = readInt(input);
+                if (location < 0 || location >= city.N){
+                    System.out.println("Rider Location Invalid");
+                    break;
+                }
+                System.out.println("Rider Succesfully registered!");
+                
+                riderManager.addRider(new Rider(riderID, riderName, location));
+                break;
+
             case 3: break;
-            case 4: break;
+            case 4: 
+                System.out.print("Enter Rider ID to be removed: ");
+                String id = input.nextLine();
+                if(riderManager.removeRider(id))
+                    System.out.println("Rider removed");
+                else
+                    System.out.println("Rider not found");
+                break;
             default: System.out.println("Invalid Option");
         }
     }
@@ -190,7 +277,8 @@ public class Main {
                 System.out.println("2. Undo Last Item (Stack Pop)");
                 System.out.println("3. View Current Cart");
                 System.out.println("4. Confirm & Checkout (Push to Queue)");
-                System.out.println("5. Cancel Order");
+                System.out.println("5. Remove Item");
+                System.out.println("6. Cancel Order");
                 System.out.print("Action: ");
                 
                 int cartChoice = readInt(input);
@@ -219,7 +307,7 @@ public class Main {
                         orderProcessor.confirmAndPlaceOrder(customerName, restLoc, custLoc);
                         shopping = false;
                         break;
-                        
+
                     case 5:
                         System.out.println("Shopping cart abandoned.");
                         shopping = false;
