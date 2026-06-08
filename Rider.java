@@ -36,11 +36,10 @@ public class Rider implements Comparable<Rider>{
     
     public void onDelivery(int restaurantLocId, int customerLocId, City city) {
          isAvailable = false;
-
+         this.destinationLocId = customerLocId;
          String start = city.getLocationName(currentLocId);
          String destination = city.getLocationName(restaurantLocId);
          String customer = city.getLocationName(customerLocId);
-
          this.currentTask = "Picking up : " + start + " -> " + destination + " | Delivering to: " + customer;  
     }
     
@@ -50,7 +49,6 @@ public class Rider implements Comparable<Rider>{
         distanceToRestaurant = Double.MAX_VALUE;
         isAvailable = true;
         currentTask = "None";
-        
         System.out.println(name + " completed delivery and is now at location: " + 
                            DataManagementModule.city.getLocationName(currentLocId) + " [" + currentLocId + "]");
     }
