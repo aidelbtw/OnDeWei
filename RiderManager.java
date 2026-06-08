@@ -40,7 +40,7 @@ public class RiderManager {
         }
     }
     return busy;
-}
+    }
 
     public void showPriorityQueue(){
     PriorityQueue<Rider> pq = new PriorityQueue<>();
@@ -56,7 +56,7 @@ public class RiderManager {
                            + String.format("%.2f", r.getDistance())+ " km" );
         rank++;
     }
-}
+    }
 
     public boolean removeRider(String riderId) {
         for (int i = 0; i < allRidersList.size(); i++) {
@@ -91,6 +91,19 @@ public class RiderManager {
             System.out.println("No riders currently busy.");
         }
     }
+
+    public void refreshDistances(City city, int restaurantLocId) {
+        for (Rider rider : allRidersList) {
+            if (rider.isAvailable()) {
+                int locId = rider.getCurrentLocId();
+
+                double dx = city.locs[restaurantLocId].x - city.locs[locId].x;
+                double dy = city.locs[restaurantLocId].y - city.locs[locId].y;
+
+                rider.setDistance(Math.sqrt(dx * dx + dy * dy));
+            }
+        }
+    }
     
     public Rider assignBestRider(ArrayList<Rider> riders){
         PriorityQueue<Rider> assignmentQueue = new PriorityQueue<>();
@@ -105,7 +118,7 @@ public class RiderManager {
             return null;
         }
         Rider bestRider = assignmentQueue.poll();
-        System.out.printf("---RIDER FOUND!---\n Dispatching: %s (Distance to Restaurant: %.2f km)%n", 
+        System.out.printf("---RIDER FOUND!---\nDispatching: %s (Distance to Restaurant: %.2f km)%n", 
                           bestRider.getName() ,bestRider.getDistance());
         return bestRider;
     }

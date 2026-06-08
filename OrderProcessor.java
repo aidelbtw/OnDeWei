@@ -82,7 +82,7 @@ public class OrderProcessor {
             return;
         }
 
-        Order currentOrder = pendingOrdersQueue.remove(0);
+        Order currentOrder = pendingOrdersQueue.get(0);
 
         System.out.println("\n=========================================");
         System.out.println("Processing Order ID: " + currentOrder.getOrderId());
@@ -107,17 +107,18 @@ public class OrderProcessor {
                 rider.setDistance(distance);
             }
         }
-        
+        riderManager.refreshDistances(city, currentOrder.getRestaurantLocId());
         Rider dispatchedRider = riderManager.assignBestRider(riderManager.getAllRiders());
         
         if (dispatchedRider != null) {
             dispatchedRider.onDelivery(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId(), city);
             currentOrder.setAssignedRider(dispatchedRider);
-            currentOrder.setStatus("In Transit");
+            currentOrder.setStatus("On Delivery");
+            pendingOrdersQueue.remove(0);
             
             dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
             
-            System.out.println("OnDeWei!!!");
+            System.out.println("Rider is OnDeWei!!!");
         } else {
             currentOrder.setStatus("Delayed - No Riders Available");
             System.out.println("Alert: Dispatch hold placed. Order delayed until a rider logs on.");

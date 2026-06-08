@@ -41,10 +41,11 @@ public class Order {
     }
 
     public String generateSummary() {
+        City city = new City();
         String summary = "Order ID: " + orderId + "\n";
         
-        summary += "Customer: " + customerName + " (Location Node: " + customerLocId + ")\n";
-        summary += "Restaurant Location Node: " + restaurantLocId + "\n";
+        summary += "Customer: " + customerName + " (" + city.getLocationName(customerLocId) + ")\n";
+        summary += "Restaurant: " + city.getLocationName(restaurantLocId) + "\n";
         summary += "Status: " + status + "\n";
         
         String riderName = (assignedRider != null) ? assignedRider.getName() : "None";
