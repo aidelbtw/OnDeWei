@@ -1,5 +1,5 @@
 public class DataManagementModule {
-    static City city = new City();
+    static City city;
 }
 
 // 2. USER DATA BLUEPRINT

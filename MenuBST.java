@@ -48,10 +48,10 @@ public class MenuBST {
 
     public void displayMenuInOrder() {
         if (root == null) {
-            System.out.println("  (Menu is empty)");
+            System.out.println("(Menu is empty)");
             return;
         }
-        System.out.printf("  %-20s | %-15s | %s%n", "Food Name", "Category", "Price");
+        System.out.printf("%-20s | %-15s | %s%n", "Food Name", "Category", "Price");
         inOrderRec(root);
     }
 

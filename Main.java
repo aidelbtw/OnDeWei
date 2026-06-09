@@ -39,6 +39,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         loadSampleData();
+        DataManagementModule.city = city;
 
         int choice = -1;
         while (choice != 0){
@@ -299,21 +300,8 @@ public class Main {
                 }
 
                 int restLoc = restaurant.getLocation();
-
-                int restX = city.locs[restLoc].x;
-                int restY = city.locs[restLoc].y;
-
                 for(Rider rider : riderManager.getAllRiders()){
-
-                    int riderLoc = rider.getCurrentLocId();
-
-                    int riderX = city.locs[riderLoc].x;
-                    int riderY = city.locs[riderLoc].y;
-
-                    double distance =
-                        Math.sqrt(Math.pow(restX-riderX,2)
-                        + Math.pow(restY-riderY,2));
-
+                    double distance = city.getShortestDistance(rider.getCurrentLocId(), restLoc);
                     rider.setDistance(distance);
                 }
 
