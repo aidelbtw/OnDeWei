@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Collections;
 
 public class City {
@@ -101,6 +100,17 @@ public class City {
     }
 
     public void dijkstra(int start, int end){
+        double distance = getShortestDistance(start, end);
+        if (distance == Double.MAX_VALUE){
+            System.out.println("No route was found");
+            return;
+        }
+
+        System.out.println("Route: " + getShortestPathString(start, end));
+        System.out.printf("Distance: %.2f km%n", distance);
+    }
+
+    public ArrayList<Integer> getShortestPath(int start, int end){
         double[] dist = new double[N];
         int[] prev = new int[N];
         boolean[] visited = new boolean[N];
@@ -110,46 +120,81 @@ public class City {
 
         dist[start] = 0;
 
-        for (int step = 0; step < N ; step++){
+        for (int step = 0 ; step < N ; step++){
             int u = -1;
-            for (int v = 0; v < N; v++){
-                if (!visited[v] && (u == -1 || dist[v] < dist[u])){
+            for (int v = 0 ; v < N ; v++){
+                if(!visited[v] && (u == -1 || dist[v] < dist[u])){
                     u = v;
                 }
             }
-
-        if (u == -1 || dist[u] == Double.MAX_VALUE){
-            break;
+            if (u == -1 || dist[u] == Double.MAX_VALUE){
+                break;
+            }
+            visited[u] = true;
+            for (int v = 0 ; v < N ; v++){
+                if (!visited[v] && roads[u][v] > 0){
+                    double newDist = dist[u] + roads[u][v];
+                    if (newDist < dist[v]){
+                        dist[v] = newDist;
+                        prev[v] = u;
+                    }
+                }
+            }
+        }
+        ArrayList<Integer> path = new ArrayList<>();
+        if (dist[end] == Double.MAX_VALUE){
+            return path;
         }
 
-        visited[u] = true;
+        for (int at = end ; at != -1 ; at = prev[at]){
+            path.add(at);
+        }
 
-        for (int v = 0; v < N ; v++){
+        Collections.reverse(path);
+        return path;
+    }
+
+    public String getShortestPathString(int start, int end){
+        ArrayList<Integer> path = getShortestPath(start, end);
+
+        if(path.isEmpty()){
+            return "No route was found";
+        }
+
+        ArrayList<String> names = new ArrayList<>();
+        for (int loc : path){
+            names.add(locs[loc].name);
+        }
+
+        return String.join(" -> ", names);
+    }
+
+    public double getShortestDistance(int start, int end){
+    double[] dist = new double[N];
+    boolean[] visited = new boolean[N];
+
+    Arrays.fill(dist, Double.MAX_VALUE);
+    dist[start] = 0;
+    for (int step = 0 ; step < N ; step++){
+        int u = -1;
+        for (int i = 0 ; i < N ; i++){
+            if (!visited[i] && (u == -1 || dist[i] < dist[u])){
+                u = i;
+            }
+        }
+        if (u == -1 || dist[u] == Double.MAX_VALUE) break;
+        visited[u] = true;
+        for (int v = 0 ; v < N ; v++){
             if (!visited[v] && roads[u][v] > 0){
                 double newDist = dist[u] + roads[u][v];
 
                 if (newDist < dist[v]){
                     dist[v] = newDist;
-                    prev[v] = u;
                 }
             }
         }
     }
-
-    if (dist[end] == Double.MAX_VALUE){
-        System.out.println("No route found");
-        return;
-    }
-
-    List<String> path = new ArrayList<>();
-
-    for (int at = end; at != -1; at = prev[at]){
-        path.add(locs[at].name);
-    }
-
-    Collections.reverse(path);
-
-    System.out.println("Route: " + String.join(" -> ", path));
-    System.out.printf("Distance : %.1f km%n", dist[end]);
-    }
+    return dist[end];
 }
+}
+

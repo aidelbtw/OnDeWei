@@ -37,11 +37,10 @@ public class DataRetrieval {
         User u = searchUserById(userId);
         if (u != null) {
             System.out.println("\n  --- Customer Found ---");
-            System.out.println("  ID       : " + u.getUserId());
-            System.out.println("  Name     : " + u.getName());
-            System.out.println("  Location : " + DataManagementModule.city.getLocationName(u.getLocation()) + " [" + u.getLocation() + "]");
+            System.out.println("ID   " + u.getUserId() + " | Name: " +u.getName() + "| Location: " +
+                               DataManagementModule.city.getLocationName(u.getLocation()) + " [" + u.getLocation() + "]");
         } else {
-            System.out.println("  No customer found with ID: " + userId);
+            System.out.println("No customer found with ID: " + userId);
         }
     }
 

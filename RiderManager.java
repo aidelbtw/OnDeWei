@@ -96,11 +96,7 @@ public class RiderManager {
         for (Rider rider : allRidersList) {
             if (rider.isAvailable()) {
                 int locId = rider.getCurrentLocId();
-
-                double dx = city.locs[restaurantLocId].x - city.locs[locId].x;
-                double dy = city.locs[restaurantLocId].y - city.locs[locId].y;
-
-                rider.setDistance(Math.sqrt(dx * dx + dy * dy));
+                rider.setDistance(city.getShortestDistance(locId, restaurantLocId));
             }
         }
     }
