@@ -1,14 +1,16 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class OrderProcessor {
-    private ArrayList<Order> pendingOrdersQueue;
+    private Deque<Order> pendingOrdersQueue;
     private ArrayList<OrderItem> cartDraftStack;
     private City city;
     private DataRetrieval dataRetrieval; 
     private RiderManager riderManager;
 
     public OrderProcessor(City city, DataRetrieval dataRetrieval, RiderManager riderManager) {
-        this.pendingOrdersQueue = new ArrayList<>();
+        this.pendingOrdersQueue = new ArrayDeque<>();
         this.cartDraftStack = new ArrayList<>();
         this.city = city;
         this.dataRetrieval = dataRetrieval;
@@ -26,7 +28,7 @@ public class OrderProcessor {
             OrderItem removed = cartDraftStack.remove(cartDraftStack.size() - 1);
             System.out.println("Undone: Removed \"" + removed.getFoodName() + "\"");
         } else {
-            System.out.println("Cart is empty!");
+            System.out.println("Cart is empty. Nothing to undo.");
         }
     }
 
@@ -60,7 +62,7 @@ public class OrderProcessor {
     }
 
     System.out.println("Item not found in cart");
-}
+    }
 
     public void confirmAndPlaceOrder(String customerName, int restaurantLocId, int customerLocId) {
         if (cartDraftStack.isEmpty()) {
@@ -69,7 +71,7 @@ public class OrderProcessor {
         }
 
         Order newOrder = new Order(customerName, restaurantLocId, customerLocId, cartDraftStack);
-        pendingOrdersQueue.add(newOrder);
+        pendingOrdersQueue.addLast(newOrder);
         dataRetrieval.saveOrder(newOrder.getOrderId(), newOrder.generateSummary());
         cartDraftStack.clear();
         
@@ -82,7 +84,7 @@ public class OrderProcessor {
             return;
         }
 
-        Order currentOrder = pendingOrdersQueue.get(0);
+        Order currentOrder = pendingOrdersQueue.peekFirst();
 
         System.out.println("\n=========================================");
         System.out.println("Processing Order ID: " + currentOrder.getOrderId());
@@ -101,7 +103,7 @@ public class OrderProcessor {
             dispatchedRider.onDelivery(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId(), city);
             currentOrder.setAssignedRider(dispatchedRider);
             currentOrder.setStatus("On Delivery");
-            pendingOrdersQueue.remove(0);
+            pendingOrdersQueue.pollFirst();
             
             dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
             
@@ -111,7 +113,6 @@ public class OrderProcessor {
             System.out.println("Alert: Dispatch hold placed. Order delayed until a rider logs on.");
         }
         
-        dataRetrieval.saveOrder(currentOrder.getOrderId(), currentOrder.generateSummary());
         System.out.println("=========================================");
     }
 
@@ -122,7 +123,10 @@ public class OrderProcessor {
         }
         System.out.println("\n--- Pending Orders Queue ---");
         for (Order order : pendingOrdersQueue) {
-            System.out.println("[" + order.getOrderId() + "] " + order.getCustomerName() + " (" + order.getItems().size() + " items)");
+            System.out.println("[" + order.getOrderId() + "] "
+                    + order.getCustomerName()
+                    + " (" + order.getItems().size() + " items)"
+                    + " | Status: " + order.getStatus());        
         }
     }
 }
