@@ -1,6 +1,22 @@
 public class DataManagementModule {
     static City city;
+    static UserLinkedList users = new UserLinkedList();
+    static RestaurantLinkedList restaurants = new RestaurantLinkedList();
+    static DataRetrieval dataRetrieval = new DataRetrieval();
+
+    // 1. SMALL WRAPPER METHODS FOR ADDING AND REMOVING USERS. 
+    public static void addUser(User u) {
+        users.addUser(u);
+        dataRetrieval.registerUser(u);
+    }
+
+    public static void removeUser(String id) {
+        users.removeUserById(id);
+        dataRetrieval.removeUser(id);
+    }
 }
+
+
 
 // 2. USER DATA BLUEPRINT
 class User {
