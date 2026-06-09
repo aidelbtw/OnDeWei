@@ -14,10 +14,8 @@ public class Main {
     User u1 = new User("U001", "Ali", 0);
     User u2 = new User("U002", "Siti", 3);
 
-    users.addUser(u1);
-    dataRetrieval.registerUser(u1);
-    users.addUser(u2);
-    dataRetrieval.registerUser(u2);
+    DataManagementModule.addUser(u1);
+    DataManagementModule.addUser(u2);
 
     // Restaurants
     Restaurant r1 = new Restaurant("R001", "Mamak Corner", 5);
@@ -57,13 +55,13 @@ public class Main {
 
             choice = readInt(input);
             switch (choice) {
-                case 1: menuCustomer(); break;
-                case 2: menuRestaurant(); break;
-                case 3: menuRider(); break;
+                case 1: menuCustomer(input); break;
+                case 2: menuRestaurant(input); break;
+                case 3: menuRider(input); break;
                 case 4: menuPlaceOrder(input); break;
                 case 5: orderProcessor.processNextOrder(); break;
-                case 6: menuSearch(); break;
-                case 7: menuMap(); break;
+                case 6: menuSearch(input); break;
+                case 7: menuMap(input); break;
                 case 8: orderProcessor.displayPendingOrders(); break;
                 case 0: System.out.println("System Shutdown, Byeeeee! <3");break;      
                 default: System.out.println("Invalid Choice, Please try again");
@@ -72,8 +70,7 @@ public class Main {
         input.close();
     }
 
-    public static void menuCustomer(){
-        Scanner input = new Scanner(System.in);
+    public static void menuCustomer(Scanner input){
         System.out.println("\n------- Customer Management -------");
         System.out.println("1. View all customers");
         System.out.println("2. Add new customer");
@@ -103,16 +100,14 @@ public class Main {
                     return;
                 }
                 User user = new User(id, name, location);
-                users.addUser(user);
-                dataRetrieval.registerUser(user);
+                DataManagementModule.addUser(user);
                 break;
 
             case 3: 
                 System.out.print("Customer ID to remove: ");
                 String remove = input.nextLine();
                 
-                users.removeUserById(remove);
-                dataRetrieval.removeUser(remove);
+                DataManagementModule.removeUser(remove);
                 break;
 
             case 4: break;
@@ -120,8 +115,7 @@ public class Main {
         }
     }
 
-    public static void menuRestaurant(){
-        Scanner input = new Scanner(System.in);
+    public static void menuRestaurant(Scanner input){
         System.out.println("\n------- Restaurant Management -------");
         System.out.println("1. View all restaurants");
         System.out.println("2. View a restaurant's menu");
@@ -248,8 +242,7 @@ public class Main {
         }
     }
 
-    public static void menuRider(){
-        Scanner input = new Scanner(System.in);
+    public static void menuRider(Scanner input){
         System.out.println("\n------- Rider Management -------");
         System.out.println("1. View all riders");
         System.out.println("2. Add new rider");
@@ -363,8 +356,7 @@ public class Main {
                     }
 
                     customer = new User(customerId, name, location);
-                    users.addUser(customer);
-                    dataRetrieval.registerUser(customer);
+                    DataManagementModule.addUser(customer);
                     System.out.println("Customer registered");
                     
                 } else {
@@ -437,8 +429,7 @@ public class Main {
         }
 
 // ---- SEARCH MENU (HashMap) ----
-    public static void menuSearch() {
-        Scanner input = new Scanner(System.in);
+    public static void menuSearch(Scanner input) {
         System.out.println("\n ------- Search Menu -------");
         System.out.println("1. Search customer by ID");
         System.out.println("2. Search order by ID");
@@ -464,8 +455,7 @@ public class Main {
         }
     }
 
-    public static void menuMap(){
-        Scanner input = new Scanner(System.in);
+    public static void menuMap(Scanner input){
         System.out.println("\n ------- Map Menu -------");
         System.out.println("1. Display Map");
         System.out.println("2. Calculate Shortest Distance");
