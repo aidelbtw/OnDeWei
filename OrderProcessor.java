@@ -93,20 +93,7 @@ public class OrderProcessor {
         System.out.println("Calculating optimal delivery route...");
         city.dijkstra(currentOrder.getRestaurantLocId(), currentOrder.getCustomerLocId());
         System.out.println("-----------------------------------------");
-        int restX = city.locs[currentOrder.getRestaurantLocId()].x;
-        int restY = city.locs[currentOrder.getRestaurantLocId()].y;
 
-        for (Rider rider : riderManager.getAllRiders()) {
-            if (rider.isAvailable()) {
-                int riderLocId = rider.getCurrentLocId(); 
-                int riderX = city.locs[riderLocId].x;
-                int riderY = city.locs[riderLocId].y;
-                
-                // Euclidean straight line distance formula application
-                double distance = Math.sqrt(Math.pow(restX - riderX, 2) + Math.pow(restY - riderY, 2));
-                rider.setDistance(distance);
-            }
-        }
         riderManager.refreshDistances(city, currentOrder.getRestaurantLocId());
         Rider dispatchedRider = riderManager.assignBestRider(riderManager.getAllRiders());
         

@@ -37,10 +37,13 @@ public class Rider implements Comparable<Rider>{
     public void onDelivery(int restaurantLocId, int customerLocId, City city) {
          isAvailable = false;
          this.destinationLocId = customerLocId;
-         String start = city.getLocationName(currentLocId);
-         String destination = city.getLocationName(restaurantLocId);
-         String customer = city.getLocationName(customerLocId);
-         this.currentTask = "Picking up : " + start + " -> " + destination + " | Delivering to: " + customer;  
+         String routeToRestaurant = city.getShortestPathString(currentLocId, restaurantLocId);
+         String routeToCustomer = city.getShortestPathString(restaurantLocId, customerLocId);
+         this.currentTask = routeToRestaurant + " -> " + routeToCustomer;
+         double riderToRestaurant = city.getShortestDistance(currentLocId, restaurantLocId);
+         double restaurantToCustomer = city.getShortestDistance(restaurantLocId, customerLocId);
+         double totalDistance = riderToRestaurant + restaurantToCustomer;
+         System.out.printf("Total delivery distance: %.2f km%n", totalDistance);
     }
     
     public void completeDelivery() {

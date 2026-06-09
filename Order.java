@@ -46,7 +46,6 @@ public class Order {
         
         summary += "Customer: " + customerName + " (" + city.getLocationName(customerLocId) + ")\n";
         summary += "Restaurant: " + city.getLocationName(restaurantLocId) + "\n";
-        summary += "Status: " + status + "\n";
         
         String riderName = (assignedRider != null) ? assignedRider.getName() : "None";
         summary += "Rider Assigned: " + riderName + "\n";
