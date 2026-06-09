@@ -41,7 +41,7 @@ public class Order {
     }
 
     public String generateSummary() {
-        City city = new City();
+        City city =  DataManagementModule.city;
         String summary = "Order ID: " + orderId + "\n";
         
         summary += "Customer: " + customerName + " (" + city.getLocationName(customerLocId) + ")\n";
