@@ -129,4 +129,7 @@ public class OrderProcessor {
                     + " | Status: " + order.getStatus());        
         }
     }
+    public void clearCart() {
+        cartDraftStack.clear();
+    }
 }
