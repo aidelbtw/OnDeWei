@@ -109,7 +109,6 @@ public class City {
         System.out.println("Route: " + getShortestPathString(start, end));
         System.out.printf("Distance: %.2f km%n", distance);
     }
-    
 
     public ArrayList<Integer> getShortestPath(int start, int end){
         double[] dist = new double[N];
@@ -170,15 +169,32 @@ public class City {
         return String.join(" -> ", names);
     }
 
-    public double getShortestDistance(int start, int end) {
-        ArrayList<Integer> path = getShortestPath(start, end);
-        if (path.isEmpty()) return Double.MAX_VALUE;
+    public double getShortestDistance(int start, int end){
+    double[] dist = new double[N];
+    boolean[] visited = new boolean[N];
 
-        double total = 0;
-        for (int i = 0; i < path.size() - 1; i++) {
-            total += roads[path.get(i)][path.get(i + 1)];
+    Arrays.fill(dist, Double.MAX_VALUE);
+    dist[start] = 0;
+    for (int step = 0 ; step < N ; step++){
+        int u = -1;
+        for (int i = 0 ; i < N ; i++){
+            if (!visited[i] && (u == -1 || dist[i] < dist[u])){
+                u = i;
+            }
         }
-        return total;
+        if (u == -1 || dist[u] == Double.MAX_VALUE) break;
+        visited[u] = true;
+        for (int v = 0 ; v < N ; v++){
+            if (!visited[v] && roads[u][v] > 0){
+                double newDist = dist[u] + roads[u][v];
+
+                if (newDist < dist[v]){
+                    dist[v] = newDist;
+                }
+            }
+        }
     }
+    return dist[end];
+}
 }
 
