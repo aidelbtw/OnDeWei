@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Rider implements Comparable<Rider>{
     private String id;
     private String name;
@@ -35,15 +37,34 @@ public class Rider implements Comparable<Rider>{
     }
     
     public void onDelivery(int restaurantLocId, int customerLocId, City city) {
-         isAvailable = false;
-         this.destinationLocId = customerLocId;
-         String routeToRestaurant = city.getShortestPathString(currentLocId, restaurantLocId);
-         String routeToCustomer = city.getShortestPathString(restaurantLocId, customerLocId);
-         this.currentTask = routeToRestaurant + " -> " + routeToCustomer;
-         double riderToRestaurant = city.getShortestDistance(currentLocId, restaurantLocId);
-         double restaurantToCustomer = city.getShortestDistance(restaurantLocId, customerLocId);
-         double totalDistance = riderToRestaurant + restaurantToCustomer;
-         System.out.printf("Total delivery distance: %.2f km%n", totalDistance);
+        isAvailable = false;
+        this.destinationLocId = customerLocId;
+         
+        ArrayList<Integer> pathToRest = city.getShortestPath(currentLocId, restaurantLocId);
+        ArrayList<Integer> pathToCust = city.getShortestPath(restaurantLocId, customerLocId);
+        
+        StringBuilder task = new StringBuilder();
+        for (int i = 0; i < pathToRest.size(); i++) {
+            if (i > 0) task.append(" -> ");
+            task.append(city.getLocationName(pathToRest.get(i)));
+        }
+        for (int i = 1; i < pathToCust.size(); i++) {
+            task.append(" -> ").append(city.getLocationName(pathToCust.get(i)));
+        }
+        this.currentTask = task.toString();
+
+        double riderToRestaurant = 0;
+        for (int i = 0; i < pathToRest.size() - 1; i++) {
+            riderToRestaurant += city.roads[pathToRest.get(i)][pathToRest.get(i + 1)];
+        }
+
+        double restaurantToCustomer = 0;
+        for (int i = 0; i < pathToCust.size() - 1; i++) {
+            restaurantToCustomer += city.roads[pathToCust.get(i)][pathToCust.get(i + 1)];
+        }
+
+        double totalDistance = riderToRestaurant + restaurantToCustomer;
+        System.out.printf("Total delivery distance: %.2f km%n", totalDistance);
     }
     
     public void completeDelivery() {
