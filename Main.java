@@ -7,27 +7,33 @@ public class Main {
     public static void loadSampleData() {
 
     // Users
-    User u1 = new User("U001", "Ali", 0);
-    User u2 = new User("U002", "Siti", 3);
+    User u1 = new User("U001", "Aidel", 2);
+    User u2 = new User("U002", "Faris", 3);
+    User u3 = new User("U003", "Zahran", 6);
 
     DataManagementModule.addUser(u1);
     DataManagementModule.addUser(u2);
+    DataManagementModule.addUser(u3);
 
     // Restaurants
-    Restaurant r1 = new Restaurant("R001", "Mamak Corner", 5);
-    r1.addFood(new FoodItem("Nasi Goreng", 8.50, "Main"));
-    r1.addFood(new FoodItem("Teh Tarik", 2.50, "Drink"));
+    Restaurant r1 = new Restaurant("R001", "Novi Cafe", 0);
+    r1.addFood(new FoodItem("Mee Tarik", 12.00, "Main"));
+    r1.addFood(new FoodItem("Nasi Goreng", 6, "Main"));
+    r1.addFood(new FoodItem("Teh O Ais", 2.50, "Drink"));
+    r1.addFood(new FoodItem("Milo Ais", 3.00, "Drink"));
 
-    Restaurant r2 = new Restaurant("R002", "Burger House", 4);
-    r2.addFood(new FoodItem("Cheeseburger", 12.00, "Main"));
+    Restaurant r2 = new Restaurant("R002", "KHShawarma", 1);
+    r2.addFood(new FoodItem("Lamb Shawarma", 8.00, "Main"));
+    r2.addFood(new FoodItem("Hummus", 8.00, "Side"));
     r2.addFood(new FoodItem("Fries", 5.00, "Side"));
+    r2.addFood(new FoodItem("Teh Ais", 2.50, "Drink"));
 
     DataManagementModule.restaurants.addRestaurant(r1);
     DataManagementModule.restaurants.addRestaurant(r2);
 
     // Riders
-    riderManager.addRider(new Rider("RD001", "Ahmad", 1));
-    riderManager.addRider(new Rider("RD002", "Jason", 6));
+    riderManager.addRider(new Rider("RD001", "Emraan", 4));
+    riderManager.addRider(new Rider("RD002", "Athar", 5));
 }
 
     public static void main(String[] args) {
