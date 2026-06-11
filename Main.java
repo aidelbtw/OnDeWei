@@ -17,6 +17,7 @@ public class Main {
 
     DataManagementModule.addUser(u1);
     DataManagementModule.addUser(u2);
+    DataManagementModule.addUser(u3);
 
     // Restaurants
     Restaurant r1 = new Restaurant("R001", "Novi Cafe", 0);
