@@ -111,12 +111,12 @@ public class City {
     }
 
     public ArrayList<Integer> getShortestPath(int start, int end){
-        double[] dist = new double[N];
-        int[] prev = new int[N];
+        double[] dist = new double[N]; //used for shortest distance from start
+        int[] prev = new int[N]; 
         boolean[] visited = new boolean[N];
 
-        Arrays.fill(dist, Double.MAX_VALUE);
-        Arrays.fill(prev, -1);
+        Arrays.fill(dist, Double.MAX_VALUE); //distances start from infinite cause we dont know 
+        Arrays.fill(prev, -1); //no previous locs
 
         dist[start] = 0;
 
@@ -124,15 +124,15 @@ public class City {
             int u = -1;
             for (int v = 0 ; v < N ; v++){
                 if(!visited[v] && (u == -1 || dist[v] < dist[u])){
-                    u = v;
+                    u = v; //compares unvisited nodes to find smallest distance and puts in u
                 }
             }
             if (u == -1 || dist[u] == Double.MAX_VALUE){
-                break;
+                break; //no connected nodes were found
             }
             visited[u] = true;
-            for (int v = 0 ; v < N ; v++){
-                if (!visited[v] && roads[u][v] > 0){
+            for (int v = 0 ; v < N ; v++){                  //checks all adjacent thats not visited, finds if exists, and finds if exists a shorter path
+                if (!visited[v] && roads[u][v] > 0){        //if exists, will replace with new distance and its previous node
                     double newDist = dist[u] + roads[u][v];
                     if (newDist < dist[v]){
                         dist[v] = newDist;
@@ -143,15 +143,15 @@ public class City {
         }
         ArrayList<Integer> path = new ArrayList<>();
         if (dist[end] == Double.MAX_VALUE){
-            return path;
+            return path; //If not able to reach the end node
         }
 
         for (int at = end ; at != -1 ; at = prev[at]){
             path.add(at);
         }
 
-        Collections.reverse(path);
-        return path;
+        Collections.reverse(path);  //Because it tracks backwards from end to start, in path end to start
+        return path;                //It uses reverse to turn it around the right way
     }
 
     public String getShortestPathString(int start, int end){

@@ -63,29 +63,33 @@ public class MenuBST {
     }
 
     public boolean delete(String name) {
-        if (root == null) return false;
-        boolean[] deleted = {false};
-        root = deleteRec(root, name, deleted);
-        return deleted[0];
+        if (search(name) == null) {
+            return false;
+        }
+        root = deleteRec(root, name);
+        return true;
     }
 
-    private FoodBSTNode deleteRec(FoodBSTNode node, String name, boolean[] deleted) {
+    private FoodBSTNode deleteRec(FoodBSTNode node, String name) {
         if (node == null) return null;
 
         int cmp = name.compareToIgnoreCase(node.food.getName());
 
         if (cmp < 0) {
-            node.left = deleteRec(node.left, name, deleted);
+            node.left = deleteRec(node.left, name);
         } else if (cmp > 0) {
-            node.right = deleteRec(node.right, name, deleted);
+            node.right = deleteRec(node.right, name);
         } else {
-            deleted[0] = true;
+            // Node to delete found
             if (node.left == null) return node.right;
             if (node.right == null) return node.left;
+
+            // Node has two children - replace with in-order successor (smallest in right subtree)
             FoodBSTNode successor = findMin(node.right);
             node.food = successor.food;
-            node.right = deleteRec(node.right, successor.food.getName(), deleted);
+            node.right = deleteRec(node.right, successor.food.getName());
         }
+
         return node;
     }
 

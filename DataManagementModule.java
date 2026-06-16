@@ -132,7 +132,6 @@ class UserLinkedList {
         UserNode current = head;
         if (current == null){
             System.out.println("\nThere are no registered customers");
-            return;
         }
         while (current != null) {
             System.out.println("ID: " + current.userData.getUserId() + " | Name: " + current.userData.getName() + 
