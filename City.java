@@ -115,7 +115,7 @@ public class City {
         int[] prev = new int[N]; 
         boolean[] visited = new boolean[N];
 
-        Arrays.fill(dist, Double.MAX_VALUE); //distances start from infinite cause we dont know
+        Arrays.fill(dist, Double.MAX_VALUE); //distances start from infinite cause we dont know 
         Arrays.fill(prev, -1); //no previous locs
 
         dist[start] = 0;
