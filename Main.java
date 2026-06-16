@@ -2,7 +2,7 @@ import java.util.Scanner;
 public class Main {
     static City city = new City();
     static RiderManager riderManager = new RiderManager();
-    static DataRetrieval dataRetrieval = new DataRetrieval();
+    static DataRetrieval dataRetrieval = DataManagementModule.dataRetrieval;
     static DataManagementModule dm = new DataManagementModule();
     static UserLinkedList users = new UserLinkedList();
     static RestaurantLinkedList restaurants = new RestaurantLinkedList();
@@ -86,7 +86,7 @@ public class Main {
 
         int choice = readInt(input);
         switch (choice){
-            case 1: users.displayUsers(); 
+            case 1: DataManagementModule.users.displayUsers(); 
                 break;
 
             case 2: 
