@@ -2,7 +2,11 @@ import java.util.Scanner;
 public class Main {
     static City city = new City();
     static RiderManager riderManager = new RiderManager();
-    static OrderProcessor orderProcessor = new OrderProcessor(city, DataManagementModule.dataRetrieval, riderManager);
+    static DataRetrieval dataRetrieval = new DataRetrieval();
+    static DataManagementModule dm = new DataManagementModule();
+    static UserLinkedList users = new UserLinkedList();
+    static RestaurantLinkedList restaurants = new RestaurantLinkedList();
+    static OrderProcessor orderProcessor = new OrderProcessor(city, dataRetrieval, riderManager);
 
     public static void loadSampleData() {
 
@@ -28,8 +32,8 @@ public class Main {
     r2.addFood(new FoodItem("Fries", 5.00, "Side"));
     r2.addFood(new FoodItem("Teh Ais", 2.50, "Drink"));
 
-    DataManagementModule.restaurants.addRestaurant(r1);
-    DataManagementModule.restaurants.addRestaurant(r2);
+    restaurants.addRestaurant(r1);
+    restaurants.addRestaurant(r2);
 
     // Riders
     riderManager.addRider(new Rider("RD001", "Emraan", 4));
@@ -38,8 +42,8 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        DataManagementModule.city = city;
         loadSampleData();
+        DataManagementModule.city = city;
 
         int choice = -1;
         while (choice != 0){
@@ -88,7 +92,7 @@ public class Main {
             case 2: 
                 System.out.print("Enter Customer ID: ");
                 String id = input.nextLine();
-                if(DataManagementModule.dataRetrieval.searchUserById(id) != null){
+                if(dataRetrieval.searchUserById(id) != null){
                     System.out.println("Customer ID already exists");
                     break;
                 }
@@ -99,7 +103,7 @@ public class Main {
                 int location = readInt(input);
                 if (location < 0 || location >= city.N){
                     System.out.println("Invalid location");
-                    break;
+                    return;
                 }
                 User user = new User(id, name, location);
                 DataManagementModule.addUser(user);
@@ -131,13 +135,13 @@ public class Main {
 
         int choice = readInt(input);
         switch (choice){
-            case 1: DataManagementModule.restaurants.displayRestaurants();
+            case 1: restaurants.displayRestaurants();
                 break;
 
             case 2: 
                 System.out.print("Enter Restaurant ID: ");
                 String rid = input.nextLine();
-                Restaurant r = DataManagementModule.restaurants.findRestaurant(rid);
+                Restaurant r = restaurants.findRestaurant(rid);
                 if (r == null){
                     System.out.println("Restaurant not found");
                     break;}
@@ -148,7 +152,7 @@ public class Main {
             case 3: 
                 System.out.print("Enter Restaurant ID: ");
                 String resID = input.nextLine();
-                Restaurant rest = DataManagementModule.restaurants.findRestaurant(resID);
+                Restaurant rest = restaurants.findRestaurant(resID);
 
                 if(rest == null){
                     System.out.println("Restaurant not found");
@@ -168,7 +172,7 @@ public class Main {
             case 4: 
                 System.out.print("Enter Restaurant ID: ");
                 String id = input.nextLine();
-                if(DataManagementModule.restaurants.findRestaurant(id) != null){
+                if(restaurants.findRestaurant(id) != null){
                     System.out.println("Restaurant ID already exists");
                     break;
                 }
@@ -183,14 +187,14 @@ public class Main {
                 }
 
                 Restaurant restaurant = new Restaurant(id, name, loc);
-                DataManagementModule.restaurants.addRestaurant(restaurant);
+                restaurants.addRestaurant(restaurant);
                 break;
 
             case 5: 
                 System.out.print("Enter Restaurant ID: ");
                 String idToAdd = input.nextLine(); 
                 
-                Restaurant restoran = DataManagementModule.restaurants.findRestaurant(idToAdd);
+                Restaurant restoran = restaurants.findRestaurant(idToAdd);
                 if (restoran == null){
                     System.out.println("\nRestaurant not Found");
                     break;
@@ -201,10 +205,6 @@ public class Main {
 
                 System.out.print("Price: ");
                 double price = readDouble(input);
-                if (price <= 0){
-                    System.out.println("Invalid price");
-                    break;
-                }
 
                 System.out.print("Category: ");
                 String category = input.nextLine();
@@ -216,7 +216,7 @@ public class Main {
             case 6: 
                 System.out.print("Enter Restaurant ID to remove: ");
                 String remove = input.nextLine();
-                if(DataManagementModule.restaurants.removeRestaurantById(remove)){
+                if(restaurants.removeRestaurantById(remove)){
                     System.out.println("Restaurant removed");
                 } else {
                     System.out.println("Restaurant was not found");
@@ -227,7 +227,7 @@ public class Main {
                 System.out.print("Enter Restaurant ID to remove item from: "); 
                 String removeFrom = input.nextLine();
 
-                Restaurant resta = DataManagementModule.restaurants.findRestaurant(removeFrom);
+                Restaurant resta = restaurants.findRestaurant(removeFrom);
 
                 if(resta == null){
                     System.out.println("Restaurant was not found");
@@ -286,12 +286,12 @@ public class Main {
                 break;
 
             case 3: 
-                DataManagementModule.restaurants.displayRestaurants();
+                restaurants.displayRestaurants();
 
                 System.out.print("Enter Restaurant ID: ");
                 String restId = input.nextLine();
 
-                Restaurant restaurant = DataManagementModule.restaurants.findRestaurant(restId);
+                Restaurant restaurant = restaurants.findRestaurant(restId);
 
                 if(restaurant == null){
                     System.out.println("Restaurant not found");
@@ -300,10 +300,8 @@ public class Main {
 
                 int restLoc = restaurant.getLocation();
                 for(Rider rider : riderManager.getAllRiders()){
-                    if (rider.isAvailable()) {
                     double distance = city.getShortestDistance(rider.getCurrentLocId(), restLoc);
                     rider.setDistance(distance);
-                    }
                 }
 
                 riderManager.showPriorityQueue();
@@ -344,7 +342,7 @@ public class Main {
             System.out.print("Enter Customer ID: ");
             String customerId = input.nextLine();
 
-            User customer = DataManagementModule.dataRetrieval.searchUserById(customerId);
+            User customer = dataRetrieval.searchUserById(customerId);
 
             if (customer == null){
                 System.out.println("Customer not found");
@@ -373,12 +371,12 @@ public class Main {
             }
 
             System.out.println("\nAvailable Restaurants: ");
-            DataManagementModule.restaurants.displayRestaurants();
+            restaurants.displayRestaurants();
 
             System.out.print("Enter Restaurant ID: ");
             String restID = input.nextLine().trim();
 
-            Restaurant restaurant = DataManagementModule.restaurants.findRestaurant(restID);
+            Restaurant restaurant = restaurants.findRestaurant(restID);
             if (restaurant == null){
                 System.out.println("Restaurant ID was not found");
                 return;
@@ -408,10 +406,6 @@ public class Main {
                         }
                         System.out.print("Quantity: ");
                         int qty = readInt(input);
-                        if(qty <= 0) {
-                            System.out.println("Invalid quantity.");
-                            break;
-                        }
                         orderProcessor.addItemToCart(food.getName(), food.getPrice(),qty);
                         break;
                         
@@ -429,7 +423,6 @@ public class Main {
                         break;
 
                     case 5:
-                        orderProcessor.clearCart();
                         System.out.println("Shopping cart abandoned.");
                         shopping = false;
                         break;
@@ -441,6 +434,7 @@ public class Main {
             }
         }
 
+// ---- SEARCH MENU (HashMap) ----
     public static void menuSearch(Scanner input) {
         System.out.println("\n ------- Search Menu -------");
         System.out.println("1. Search customer by ID");
@@ -453,12 +447,12 @@ public class Main {
             case 1:
                 System.out.print("Enter Customer ID: ");
                 String cid = input.nextLine().trim();
-                DataManagementModule.dataRetrieval.displayUserResult(cid);
+                dataRetrieval.displayUserResult(cid);
                 break;
             case 2:
                 System.out.print("Enter Order ID: ");
                 String oid = input.nextLine().trim();
-                DataManagementModule.dataRetrieval.displayOrderResult(oid);
+                dataRetrieval.displayOrderResult(oid);
                 break;
             case 3:
                 break;
@@ -499,7 +493,6 @@ public class Main {
 
                 if (start < 0 || start >= city.N || end < 0 || end >= city.N){
                     System.out.println("Invalid location");
-                    break;
                 }
                 city.dijkstra(start, end);
                 break;
