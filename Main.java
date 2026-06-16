@@ -2,7 +2,7 @@ import java.util.Scanner;
 public class Main {
     static City city = new City();
     static RiderManager riderManager = new RiderManager();
-    static DataRetrieval dataRetrieval = new DataRetrieval();
+    static DataRetrieval dataRetrieval = DataManagementModule.dataRetrieval;
     static DataManagementModule dm = new DataManagementModule();
     static UserLinkedList users = new UserLinkedList();
     static RestaurantLinkedList restaurants = new RestaurantLinkedList();
